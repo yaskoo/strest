@@ -2,13 +2,13 @@
 
 # About 
 
-The goals of `strest` are to ease development, test endpoints and finally stress test an HTTP/RESTful-ish api.
-Basicaly you have to describe a bunch of requests in a yaml file (a play file).
-This comes handy when developing a new endpoint, api, etc. When you make changes the you play the file and look at the results.
-A play file could also be played in a `test` mode. In this mode request expectations are checked.
+The goals of `strest` are to ease development and testing of HTTP/REST(-ish) APIs.
 
-# Roadmap
-- [ ] Parse and play a play file
-- [ ] Assert expectations
-- [ ] Stress play a play file
-- [ ] Record stats from a stres play
+Basicaly you have to describe a bunch of requests in a yaml file (a play file).
+Then you make changes the your API, play the play and look at the results.
+
+When v1 is ready it should have the following general features:
+
+- [ ] Play a bunch of requests described in a play file (the `play` command)
+- [ ] Play a play file and assert expectation (the `test` command)
+- [ ] Stress play a play file and gather some stats (the `stress` command)

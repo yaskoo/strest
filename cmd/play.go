@@ -5,40 +5,28 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/yaskoo/strest/play"
-
 	"github.com/spf13/cobra"
+
+	"github.com/yaskoo/strest/types"
 )
 
-var playFile string
-var testMode bool
 var playCmd = &cobra.Command{
-	Use:   "play",
+	Use:   "play FILE",
 	Short: "Play a play described in a YAML file",
-	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		if playFile == "" {
-			fmt.Println("A play file is required")
+		if len(args) != 1 {
+			fmt.Println("The 'play' command requires a single argument, which is the file to play")
 			os.Exit(1)
 		}
 
 		client := &http.Client{}
-		p := play.New(playFile)
-		ctx := &play.Context{
-			Responses: make([]*play.Response, len(p.Steps)),
-		}
+		ctx := &types.Context{}
 
-		if testMode {
-			p.ExecTest(ctx, client)
-		} else {
-			p.Exec(ctx, client)
-		}
+		p := types.NewPlay(args[0])
+		p.Play(ctx, client)
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(playCmd)
-
-	playCmd.Flags().StringVarP(&playFile, "file", "f", "", "YAML file to play")
-	playCmd.Flags().BoolVarP(&testMode, "test", "t", false, "Play the play in test mode i.e check expectations")
 }
