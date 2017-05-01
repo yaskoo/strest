@@ -3,9 +3,9 @@ package template
 import (
 	"text/template"
 
-	"github.com/yaskoo/strest/util/jsonq"
+	"github.com/yaskoo/strest/util/json"
 )
 
 var TplFuncMap = template.FuncMap{
-	"jsonq": jsonq.Get,
+	"get_json": jsonq.Get,
 }

@@ -1,0 +1,27 @@
+---
+host: http://localhost:5001 #TODO: (~ansible style)
+steps:
+  - name: Get all docs
+    method: GET
+    url: /api/documents
+    skip: true
+  
+  # login as admin
+  - name: Login as admin
+    method: POST
+    url: /api/login
+    headers:
+      Authorization: Basic YWRtaW46YWRtaW4=
+
+  # now that we're logged in create a document
+  - name: Create a new document
+    method: POST
+    url: /api/documents
+    headers:
+      Content-Type: application/{{print "json"}}
+    # TODO: tempaltes in body
+    body: |
+      {
+        "title": "My Doc",
+        "content": "<div>This is my doc, there are many like, but this one is mine</div>"
+      }

@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/yaskoo/strest/types"
+	"github.com/yaskoo/strest/play"
 )
 
 var playCmd = &cobra.Command{

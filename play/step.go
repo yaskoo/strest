@@ -1,9 +1,11 @@
 package types
 
 import (
+	"bytes"
 	"fmt"
 	_ "io/ioutil"
 	"net/http"
+	"text/template"
 )
 
 type Step struct {
@@ -12,7 +14,7 @@ type Step struct {
 	Skip    bool                     `yaml:"skip"`
 	Method  string                   `yaml:"method"`
 	Headers map[string]SingleOrMulti `yaml:"headers"`
-	Body    *Body                    `yaml:"body"`
+	Body    Body                     `yaml:"body"`
 }
 
 func (s *Step) String() string {
@@ -28,19 +30,31 @@ func (s *Step) Exec(ctx *Context, client *http.Client, host string) {
 		return
 	}
 
-	req, _ := http.NewRequest(s.Method, host+s.Url, nil)
+	req, _ := http.NewRequest(s.Method, applyTpl(ctx, host+s.Url), nil)
 	for key, value := range s.Headers {
 		for _, h := range value.Val {
-			req.Header.Add(key, h)
+			req.Header.Add(key, applyTpl(ctx, h))
 		}
 	}
 
-	if s.Body != nil {
-		req.Body = s.Body.Reader()
-	}
+	req.Body = s.Body.Reader()
 
 	fmt.Printf("Step: %s\n", s.String())
 	client.Do(req)
 	// res, _ := client.Do(req)
 	// _, _ := ioutil.ReadAll(res.Body)
+}
+
+func applyTpl(ctx *Context, s string) string {
+	var t *template.Template
+	var err error
+	if t, err = template.New("tpl").Parse(s); err != nil {
+		panic(err)
+	}
+
+	var result bytes.Buffer
+	if err := t.Execute(&result, ctx); err != nil {
+		panic(err)
+	}
+	return result.String()
 }
