@@ -20,7 +20,9 @@ var playCmd = &cobra.Command{
 		}
 
 		client := &http.Client{}
-		ctx := &types.Context{}
+		ctx := &types.Context{
+			Register: make(map[string]string),
+		}
 
 		p := types.NewPlay(args[0])
 		p.Play(ctx, client)

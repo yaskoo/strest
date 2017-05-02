@@ -1,5 +1,5 @@
 ---
-host: http://localhost:5001 #TODO: (~ansible style)
+hosts: http://localhost:5001 #TODO: (~ansible style)
 steps:
   - name: Get all docs
     method: GET
@@ -12,16 +12,20 @@ steps:
     url: /api/login
     headers:
       Authorization: Basic YWRtaW46YWRtaW4=
+    register:
+      - key: token
+        val: '{{get_json "token" .Res.Body}}'
 
   # now that we're logged in create a document
   - name: Create a new document
     method: POST
     url: /api/documents
     headers:
-      Content-Type: application/{{print "json"}}
+      Authorization: Bearer {{index .Register "token"}}
+      Content-Type: application/json
     # TODO: tempaltes in body
     body: |
       {
         "title": "My Doc",
-        "content": "<div>This is my doc, there are many like, but this one is mine</div>"
+        "content": "<div>This is my doc, there are many like it, but this one is mine</div>"
       }

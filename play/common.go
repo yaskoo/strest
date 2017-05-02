@@ -1,5 +1,10 @@
 package types
 
+type RegVal struct {
+	Key string `yaml:"key"`
+	Val string `yaml:"val"`
+}
+
 type SingleOrMulti struct {
 	Val []string
 }

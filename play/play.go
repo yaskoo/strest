@@ -8,14 +8,16 @@ import (
 )
 
 type Play struct {
-	Host  string `yaml:"host"`
-	Steps []Step `yaml:"steps"`
+	Hosts SingleOrMulti `yaml:"hosts"`
+	Steps []Step        `yaml:"steps"`
 }
 
 // Plays the play
 func (p *Play) Play(ctx *Context, client *http.Client) {
 	for _, step := range p.Steps {
-		step.Exec(ctx, client, p.Host)
+		for _, host := range p.Hosts.Val {
+			step.Exec(ctx, client, host)
+		}
 	}
 }
 
