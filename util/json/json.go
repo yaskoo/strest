@@ -1,4 +1,4 @@
-package jsonq
+package json
 
 import (
 	"encoding/json"
@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 
-// Gets an element from json using the specified path
-// Array element use their index e.g `cars.1.model`
+// Gets an element from json using the specified path.
+// For array elements use their index e.g `cars.1.model`
 func Get(path string, data string) string {
 	var v interface{}
 	json.Unmarshal([]byte(data), &v)
