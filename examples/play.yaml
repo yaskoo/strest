@@ -4,7 +4,7 @@ steps:
   - name: Get all docs
     method: GET
     url: /api/documents
-    skip: true
+    skip: true # steps can be skipped
   
   # login as admin
   - name: Login as admin

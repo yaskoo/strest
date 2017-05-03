@@ -1,4 +1,4 @@
-package types
+package play
 
 type RegVal struct {
 	Key string `yaml:"key"`

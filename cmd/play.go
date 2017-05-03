@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/spf13/cobra"
 
 	"github.com/yaskoo/strest/play"
+	"github.com/yaskoo/strest/player"
 )
 
 var playCmd = &cobra.Command{
@@ -19,13 +19,12 @@ var playCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		client := &http.Client{}
-		ctx := &types.Context{
-			Register: make(map[string]string),
+		var p play.Play
+		if err := p.Load(args[0]); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
 		}
-
-		p := types.NewPlay(args[0])
-		p.Play(ctx, client)
+		player.New().Play(&p)
 	},
 }
 

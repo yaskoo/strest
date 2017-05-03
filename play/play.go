@@ -1,8 +1,7 @@
-package types
+package play
 
 import (
 	"io/ioutil"
-	"net/http"
 
 	"gopkg.in/yaml.v2"
 )
@@ -12,23 +11,22 @@ type Play struct {
 	Steps []Step        `yaml:"steps"`
 }
 
-// Plays the play
-func (p *Play) Play(ctx *Context, client *http.Client) {
-	for _, step := range p.Steps {
-		for _, host := range p.Hosts.Val {
-			step.Exec(ctx, client, host)
-		}
-	}
+type Step struct {
+	Name     string                   `yaml:"name"`
+	Url      string                   `yaml:"url"`
+	Skip     bool                     `yaml:"skip"`
+	Method   string                   `yaml:"method"`
+	Headers  map[string]SingleOrMulti `yaml:"headers"`
+	Body     Body                     `yaml:"body"`
+	Register []RegVal                 `yaml:"register"`
 }
 
-// Creates a new play using a yaml file
-func NewPlay(file string) *Play {
+func (p *Play) Load(file string) error {
 	bytes, err := ioutil.ReadFile(file)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	var play Play
-	yaml.Unmarshal(bytes, &play)
-	return &play
+	yaml.Unmarshal(bytes, p)
+	return nil
 }

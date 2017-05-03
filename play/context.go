@@ -1,4 +1,4 @@
-package types
+package play
 
 type Response struct {
 	Body string
