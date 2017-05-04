@@ -8,16 +8,16 @@ import (
 	tpl "github.com/yaskoo/strest/template"
 )
 
-func Template(ctx *play.Context, s string) string {
+func Template(ctx *play.Context, s string) (string, error) {
 	var t *template.Template
 	var err error
 	if t, err = template.New("tpl").Funcs(tpl.TplFuncMap).Parse(s); err != nil {
-		panic(err)
+		return "", err
 	}
 
 	var result bytes.Buffer
 	if err := t.Execute(&result, ctx); err != nil {
-		panic(err)
+		return "", err
 	}
-	return result.String()
+	return result.String(), nil
 }
